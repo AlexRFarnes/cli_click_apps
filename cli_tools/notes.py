@@ -12,7 +12,7 @@ DISPLAY_FORMAT = "{:<3} {:16} {:16} {:40}"
 
 
 def print_header():
-    click.echo(DISPLAY_FORMAT.format("ID", "Created", "Update", "Contents"))
+    click.echo(DISPLAY_FORMAT.format("ID", "Created", "Updated", "Content"))
     click.echo(DISPLAY_FORMAT.format("-" * 3, "-" * 16, "-" * 16, "-" * 40))
 
 
