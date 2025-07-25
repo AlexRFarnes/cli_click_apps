@@ -39,32 +39,33 @@ def save_notes(notes):
 
 
 @click.group()
-def main():
+@click.pass_context
+def main(ctx):
     """Program for managing notes."""
-    ...
-
-
-@main.command()
-def show():
-    """Show notes in notes database."""
     if not NOTES_DB.parent.exists():
         NOTES_DB.parent.mkdir()
         NOTES_DB.touch()
 
-    notes = load_notes()
+    ctx.ensure_object(dict)
+
+    ctx.obj["notes"] = load_notes()
+
+
+@main.command()
+@click.pass_context
+def show(ctx):
+    """Show notes in notes database."""
+    notes = ctx.obj["notes"]
     print_header()
     for i, note in enumerate(notes, start=1):
         print_note(i, note)
 
 
 @main.command()
-def add():
+@click.pass_context
+def add(ctx):
     """Add note in notes database."""
-    if not NOTES_DB.parent.exists():
-        NOTES_DB.parent.mkdir()
-        NOTES_DB.touch()
-
-    notes = load_notes()
+    notes = ctx.obj["notes"]
     created = datetime.now().isoformat()
     contents = click.prompt(text="Note content")
     notes.append(f"{created}\t{created}\t{contents}")
@@ -73,14 +74,10 @@ def add():
 
 
 @main.command()
-def update():
+@click.pass_context
+def update(ctx):
     """Update note in notes database."""
-    if not NOTES_DB.parent.exists():
-        NOTES_DB.parent.mkdir()
-        NOTES_DB.touch()
-
-    notes = load_notes()
-
+    notes = ctx.obj["notes"]
     print_header()
     for i, note in enumerate(notes, start=1):
         print_note(i, note)
@@ -97,13 +94,10 @@ def update():
 
 
 @main.command()
-def delete():
+@click.pass_context
+def delete(ctx):
     """Delete note in notes database."""
-    if not NOTES_DB.parent.exists():
-        NOTES_DB.parent.mkdir()
-        NOTES_DB.touch()
-
-    notes = load_notes()
+    notes = ctx.obj["notes"]
     print_header()
     for i, note in enumerate(notes, start=1):
         print_note(i, note)
